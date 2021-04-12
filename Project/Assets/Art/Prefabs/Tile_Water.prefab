@@ -50,6 +50,7 @@ MonoBehaviour:
   r: 0
   s: 0
   cost: 500
+  walkable: 0
   gridRef: {fileID: 0}
 --- !u!33 &252079155183558072
 MeshFilter:

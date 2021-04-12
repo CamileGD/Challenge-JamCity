@@ -33,7 +33,9 @@ namespace PathFinding
 
 		//Dictionaries
 		private Dictionary<string, Vector3> grid = new Dictionary<string, Vector3>();	//Tile reference and World position
-		private Dictionary<string, int> Costs = new Dictionary<string, int>();	//Tile reference and cost of it hexagon
+		private Dictionary<string, int> costs = new Dictionary<string, int>();	//Tile reference and cost of it hexagon
+		private Dictionary<string, bool> walkable = new Dictionary<string, bool>();	//Tile reference and ifMovable reference 
+		private Dictionary<string, GameObject> actualTiles = new Dictionary<string, GameObject>();	//Tile reference and actual game object reference
 
 		//-------------------------------------------------------------------------------------------------------------
 		//----------------------------------------------MAP GENERATION-------------------------------------------------
@@ -194,14 +196,14 @@ namespace PathFinding
 			graph = new Node[mapWidth, mapHeight];
 
 			for(int x=0; x < mapWidth; x++) {
-				for(int y=0; y < mapHeight; y++) {
+				for(int y=0; y < mapHeight; y++) {					
 					graph[x,y] = new Node();
 					graph[x,y].x = x;
 					graph[x,y].y = y;
 
 					//Setting each node its cost
 
-					graph[x,y].normalCost = Costs[x.ToString() + y.ToString()];
+					graph[x,y].normalCost = costs[x.ToString() + y.ToString()];
 				}
 			}
 
@@ -215,11 +217,13 @@ namespace PathFinding
 
 					if(x>0)
 					{
-						graph[x,y].neighbours.Add(graph[x-1,y]); //Right
+						if (walkable[(x-1).ToString() + y.ToString()])
+							graph[x,y].neighbours.Add(graph[x-1,y]); //Right
 					}
 					if(x < mapWidth - 1)
 					{
-						graph[x,y].neighbours.Add(graph[x+1,y]); //Left
+						if (walkable[(x+1).ToString() + y.ToString()])
+							graph[x,y].neighbours.Add(graph[x+1,y]); //Left
 					}
 
 					//Checking EvenRow diagonals
@@ -229,18 +233,23 @@ namespace PathFinding
 						if(y > 0)
 						{
 							if (x < mapWidth-1)
-								graph[x,y].neighbours.Add(graph[x+1,y-1]); //Up Left
-
-							graph[x,y].neighbours.Add(graph[x,y-1]); //Up Right
-
+							{
+								if (walkable[(x+1).ToString() + (y-1).ToString()])
+									graph[x,y].neighbours.Add(graph[x+1,y-1]); //Up Left
+							}
+							if (walkable[x.ToString() + (y-1).ToString()])
+								graph[x,y].neighbours.Add(graph[x,y-1]); //Up Right
 						}
 						if(y < mapHeight-1)
 						{
 							if(x < mapWidth -1)
-								graph[x,y].neighbours.Add(graph[x+1,y+1]); //Down Left
+							{	
+								if (walkable[(x+1).ToString() + (y+1).ToString()])
+									graph[x,y].neighbours.Add(graph[x+1,y+1]); //Down Left
+							}
 
-
-							graph[x,y].neighbours.Add(graph[x,y+1]); //Down Right
+							if (walkable[x.ToString() + (y+1).ToString()])
+								graph[x,y].neighbours.Add(graph[x,y+1]); //Down Right
 						}
 					}
 
@@ -250,19 +259,23 @@ namespace PathFinding
 					{
 						if(y > 0)
 						{
-							graph[x,y].neighbours.Add(graph[x,y-1]); //Up Left
+							if (walkable[x.ToString() + (y-1).ToString()])
+								graph[x,y].neighbours.Add(graph[x,y-1]); //Up Left
 							if(x>0)
 							{
-								graph[x,y].neighbours.Add(graph[x-1,y-1]); //Up Right
+								if (walkable[(x-1).ToString() + (y-1).ToString()])
+									graph[x,y].neighbours.Add(graph[x-1,y-1]); //Up Right
 							}
 						}
 						if(y < mapHeight-1)
 						{
-							graph[x,y].neighbours.Add(graph[x,y+1]); //Down Left
+							if (walkable[x.ToString() + (y+1).ToString()])
+								graph[x,y].neighbours.Add(graph[x,y+1]); //Down Left
 
 							if(x > 0)
 							{
-								graph[x,y].neighbours.Add(graph[x-1,y+1]); //Down Right
+								if (walkable[(x-1).ToString() + (y+1).ToString()])
+									graph[x,y].neighbours.Add(graph[x-1,y+1]); //Down Right
 							}
 						}
 					}
@@ -280,11 +293,17 @@ namespace PathFinding
 				hexTile.SetIndex(Mathf.RoundToInt(xy[i].x), Mathf.RoundToInt(xy[i].y), Mathf.RoundToInt(- xy[i].y - xy[i].x));	//Setting the hex index
 				hexTile.gridRef = this;	//Making a reference to the grid
 
-				//SettingCost
+				//Saving cost
 
-				Costs.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.cost);
+				costs.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.cost);
 
-				//TODO: Dictionary with reference to the real tile;
+				//Saving if can be walked on
+
+				walkable.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.walkable);
+
+				//Tile reference
+
+				actualTiles.Add(xy[i].x.ToString() + xy[i].y.ToString(), tile);
 			}
 		}
 
@@ -294,21 +313,44 @@ namespace PathFinding
 
 		private void Update() 
 		{
+
+			//Make the path
+
+			if(startNodeSelected && endNodeSelected)
+			{
+				currentPath = AStar.GetPath(graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)], graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)]);
+			}
+			else
+			{
+				currentPath.Clear();
+			}
 		}
 
 		public IList<IAStarNode> currentPath = new List<IAStarNode>();
 
-		public void SetSelectedTile(Vector2 node)
+		public void TileClicked(Vector2 node)
 		{
-			if (!startNodeSelected)
+
+			//Third click reset the path
+
+			if(startNodeSelected && endNodeSelected)
+			{
+				startNodeSelected = false;
+				endNodeSelected = false;
+			}
+
+			//First click select the start node
+
+			else if (!startNodeSelected)
 			{
 				startNode = node;
 				startNodeSelected = true;
 			}
-			else
-			{
-				currentPath = AStar.GetPath(graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)], graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)]);
-				
+
+			//Second click select the end node
+
+			else if (startNodeSelected && !endNodeSelected)
+			{			
 				endNode = node;
 				endNodeSelected = true;
 			}
@@ -319,19 +361,33 @@ namespace PathFinding
 		{
 			if (endNodeSelected)
 			{
+
+				//Code for checking the pathfinding
+
+				
 				foreach (Node v in currentPath)
 				{
-					Debug.Log(v + " = " + v.x.ToString() + v.y.ToString());
-					
 					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
 
 					Gizmos.color = Color.red;
 					Gizmos.DrawWireSphere(vPos, hexRadius);
-					
 				};
 				
+
+				//Code for checking the neigbours
+
+				/*
+
+				foreach (Node v in graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)].neighbours)
+				{
+					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
+
+					Gizmos.color = Color.red;
+					Gizmos.DrawWireSphere(vPos, hexRadius);
+				};
+
+				*/
 			}
 		}
-
 	}
 }
