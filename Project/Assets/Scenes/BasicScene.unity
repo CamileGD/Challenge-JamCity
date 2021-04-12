@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 53090116}
   - component: {fileID: 53090114}
   m_Layer: 0
-  m_Name: MapGenerator
+  m_Name: MapController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,10 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f41a21bcffd494bb4067417f8867b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidth: 8
-  mapHeight: 8
+  mapPosition: {x: 0, y: 0, z: 0}
   hexRadius: 0.6
-  normalHex: {fileID: 4342676474676411558, guid: 81bf4e4900549fd4e8941c43bff8db04, type: 3}
+  defaultHex: {fileID: 0}
   forestHex: {fileID: 6453841707398743733, guid: 66f747762af49734f9ab803714f8c7bd, type: 3}
   grassHex: {fileID: 1098252759862050725, guid: c38368825895ede4189312d4a380d2da, type: 3}
   desertHex: {fileID: 4304877548973607674, guid: 63a9e4685e3733f4b84b294adc61dea1, type: 3}
@@ -169,7 +168,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 53090113}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.319374, y: -95.31226, z: -193.94084}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
