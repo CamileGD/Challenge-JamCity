@@ -1,7 +1,7 @@
 Challenge de JamCity hecho por Camile Cazot
 Proyecto creado con Unity 2020.1.1f1
 
-![game sample](https://im7.ezgif.com/tmp/ezgif-7-53a1fbadbeb5.gif)
+![project sample](./ProjectSample.gif)
 
 -Mucha de la información de como trabajar con pathfinding y grids hexagonales la aprendí de: https://www.redblobgames.com/grids/hexagons/ y de estudiar los artículos extra.
 
