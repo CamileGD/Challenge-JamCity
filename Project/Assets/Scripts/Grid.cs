@@ -7,23 +7,28 @@ namespace PathFinding
 {
 	public class Grid : MonoBehaviour{
 		public static Grid inst;
-
 		//Map settings
-		public Vector3 mapPosition = Vector3.zero;
+		[Header("Map settings")]
+		[Space]
 		public int mapWidth = 8;
 		public int mapHeight = 8;
-		public float yRowSeparation = 2.32f;
+		public float hexRadius = 0.5785f;
+		public float yRowSeparation = 2.33f;
 
-		//Hex Settings
-		public float hexRadius = 1;
-
-		//Hexagon prefabs
+		[Header("Hex types settings")]
+		[Space]
+		//Hexagon prefabs and their lists
 		public GameObject defaultHex;
+		public List<Vector2> ForestList = new List<Vector2>();
 		public GameObject forestHex;
+		public List<Vector2> GrassList = new List<Vector2>();
 		public GameObject grassHex;
+		public List<Vector2> DesertList = new List<Vector2>();
 		public GameObject desertHex;
+		public List<Vector2> MountainList = new List<Vector2>();
 		public GameObject mountainHex;
-		public GameObject riverHex;
+		public List<Vector2> WaterList = new List<Vector2>();
+		public GameObject waterHex;
 
 		//Map control variables
 		private bool startNodeSelected = false;
@@ -33,8 +38,8 @@ namespace PathFinding
 		private Node[,] graph;
 
 		//Enumerables
-		public List<Vector2> tilesOcuppied = new List<Vector2>();
-		public List<Vector2> tilesCreated = new List<Vector2>();
+		private List<Vector2> tilesOcuppied = new List<Vector2>();	//List of occupied tiles
+		private List<Vector2> tilesCreated = new List<Vector2>();	//List of created tiles
 		private Dictionary<string, Vector3> grid = new Dictionary<string, Vector3>();	//Tile reference and World position
 		private Dictionary<string, int> costs = new Dictionary<string, int>();	//Tile reference and cost of it hexagon
 		private Dictionary<string, bool> walkable = new Dictionary<string, bool>();	//Tile reference and ifMovable reference 
@@ -56,15 +61,13 @@ namespace PathFinding
 			if(!inst)
 				inst = this;
 
-			GenerateGrid();
+			GenerateGrid();	//Creating it on awake
 		}
 
 		//Generate the shape and world position of the tiles
 		private void GenerateShape() 
 		{
-			//Starting Pos (0,0)Tile
-
-			Vector3 pos = mapPosition;
+			Vector3 pos = Vector3.zero;
 			
 			for(int x = 0; x < mapHeight; x++)
 			{
@@ -97,99 +100,25 @@ namespace PathFinding
 		//Paint map with corresponding tile on index
 		private void PaintMap()
 		{
-			//Painting mountains
-			List<Vector2> MountainList = new List<Vector2>();
-
-			MountainList.Add(new Vector2(1,0)); 
-			MountainList.Add(new Vector2(2,0)); 
-			MountainList.Add(new Vector2(1,1)); 
-			MountainList.Add(new Vector2(2,2)); 
-			MountainList.Add(new Vector2(3,3)); 
-			MountainList.Add(new Vector2(3,4)); 
-			MountainList.Add(new Vector2(5,6)); 
-			MountainList.Add(new Vector2(5,7)); 
-			MountainList.Add(new Vector2(6,7)); 
-			MountainList.Add(new Vector2(7,7));
-
-			PaintWith(mountainHex, MountainList);
-
-			//Painting grass
-			List<Vector2> GrassList = new List<Vector2>();
-
-			GrassList.Add(new Vector2(0,0));
-			GrassList.Add(new Vector2(3,0));
-			GrassList.Add(new Vector2(5,0));
-			GrassList.Add(new Vector2(3,1));
-			GrassList.Add(new Vector2(0,2));
-			GrassList.Add(new Vector2(3,2));
-			GrassList.Add(new Vector2(4,2));
-			GrassList.Add(new Vector2(1,4));
-			GrassList.Add(new Vector2(1,5));
-			GrassList.Add(new Vector2(4,5));
-			GrassList.Add(new Vector2(2,6));
-			GrassList.Add(new Vector2(7,6));
-			GrassList.Add(new Vector2(1,7));
-			GrassList.Add(new Vector2(3,7));
-
-			PaintWith(grassHex, GrassList);
-
 			//Painting forest
-			List<Vector2> ForestList = new List<Vector2>();
-
-			ForestList.Add(new Vector2(0,1));
-			ForestList.Add(new Vector2(2,1));
-			ForestList.Add(new Vector2(4,1));
-			ForestList.Add(new Vector2(6,2));
-			ForestList.Add(new Vector2(2,3));
-			ForestList.Add(new Vector2(4,3));
-			ForestList.Add(new Vector2(6,3));
-			ForestList.Add(new Vector2(2,4));
-			ForestList.Add(new Vector2(4,4));
-			ForestList.Add(new Vector2(6,5));
-			ForestList.Add(new Vector2(7,5));
-			ForestList.Add(new Vector2(3,6));
-			ForestList.Add(new Vector2(4,6));
-			ForestList.Add(new Vector2(6,6));
-			ForestList.Add(new Vector2(2,7));
-			ForestList.Add(new Vector2(4,7));
 
 			PaintWith(forestHex, ForestList);
 
-			//Painting desert
-			List<Vector2> DesertList = new List<Vector2>();
+			//Painting grass
 
-			DesertList.Add(new Vector2(6,0));
-			DesertList.Add(new Vector2(7,0));
-			DesertList.Add(new Vector2(5,1));
-			DesertList.Add(new Vector2(6,1));
-			DesertList.Add(new Vector2(7,1));
-			DesertList.Add(new Vector2(1,2));
-			DesertList.Add(new Vector2(5,2));
-			DesertList.Add(new Vector2(7,2));
-			DesertList.Add(new Vector2(0,3));
-			DesertList.Add(new Vector2(1,3));
-			DesertList.Add(new Vector2(7,3));
-			DesertList.Add(new Vector2(0,4));
-			DesertList.Add(new Vector2(5,5));
+			PaintWith(grassHex, GrassList);
+
+			//Painting mountains
+
+			PaintWith(mountainHex, MountainList);
+
+			//Painting desert
 
 			PaintWith(desertHex, DesertList);
 
 			//Painting rivers
-			List<Vector2> RiverList = new List<Vector2>();
 
-			RiverList.Add(new Vector2(4,0));
-			RiverList.Add(new Vector2(5,3));
-			RiverList.Add(new Vector2(5,4));
-			RiverList.Add(new Vector2(6,4));
-			RiverList.Add(new Vector2(7,4));
-			RiverList.Add(new Vector2(0,5));
-			RiverList.Add(new Vector2(2,5));
-			RiverList.Add(new Vector2(3,5));
-			RiverList.Add(new Vector2(0,6));
-			RiverList.Add(new Vector2(1,6));
-			RiverList.Add(new Vector2(0,7));
-
-			PaintWith(riverHex, RiverList);
+			PaintWith(waterHex, WaterList);
 			
 			//Filling not painted hexagons to default
 			//Default hexagons are not walkable
@@ -211,7 +140,7 @@ namespace PathFinding
 				if (free)
 				{
 					ToFill.Add(tilesCreated[c]);
-					Debug.Log("Debug: Hexagons not painted");
+					Debug.Log("Debug: " + tilesCreated[c].ToString() + " hexagon not painted");
 				}
 			}
 
@@ -311,63 +240,59 @@ namespace PathFinding
 			}
 		}
 
-		//The instantiator fo the tiles
+		//The tile instantiator
 		private void PaintWith(GameObject prefab, List<Vector2> xy)
 		{
 			for (int i = 0; i < xy.Count(); i++)
 			{
-				GameObject tile = GameObject.Instantiate(prefab, grid[xy[i].x.ToString() + xy[i].y.ToString()], Quaternion.identity);
-				HexTile hexTile = tile.GetComponent<HexTile>();
-				hexTile.SetIndex(Mathf.RoundToInt(xy[i].x), Mathf.RoundToInt(xy[i].y), Mathf.RoundToInt(- xy[i].y - xy[i].x));	//Setting the hex index
-				hexTile.gridRef = this;	//Making a reference to the grid
+				if (xy[i].x < mapWidth && xy[i].y < mapHeight)	//Checking if painted more tiles than the map allowed
+				{
+					GameObject tile = GameObject.Instantiate(prefab, grid[xy[i].x.ToString() + xy[i].y.ToString()], Quaternion.identity);
+					HexTile hexTile = tile.GetComponent<HexTile>();
+					hexTile.SetIndex(Mathf.RoundToInt(xy[i].x), Mathf.RoundToInt(xy[i].y));	//Setting the hex index
+					hexTile.gridRef = this;	//Making a reference to the grid
 
-				//Saving cost
+					//Saving cost
 
-				costs.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.cost);
+					costs.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.cost);
 
-				//Saving if can be walked on
+					//Saving if can be walked on
 
-				walkable.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.walkable);
+					walkable.Add(xy[i].x.ToString() + xy[i].y.ToString(), hexTile.walkable);
 
-				//Tile reference
+					//Tile reference
 
-				actualTiles.Add(xy[i].x.ToString() + xy[i].y.ToString(), tile);
+					actualTiles.Add(xy[i].x.ToString() + xy[i].y.ToString(), tile);
 
-				//Occupied tile
+					//Occupied tile
 
-				tilesOcuppied.Add(xy[i]);
+					tilesOcuppied.Add(xy[i]);
+				}
 			}
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
-		//----------------------------------------------MAP CONTROL----------------------------------------------------
+		//----------------------------------------------MAP UPDATER----------------------------------------------------
 		//-------------------------------------------------------------------------------------------------------------
-
-		private void Update() 
-		{
-
-			//Make the path
-
-			if(startNodeSelected && endNodeSelected)
-			{
-				currentPath = AStar.GetPath(graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)], graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)]);
-			}
-			else
-			{
-				if (currentPath!= null)
-					currentPath.Clear();
-			}
-		}
 
 		public void TileClicked(Vector2 node)
 		{
-
 			//Third click reset the path
+
+			if (node == startNode)
+				return;
 
 			if(startNodeSelected && endNodeSelected)
 			{
 				startNodeSelected = false;
 				endNodeSelected = false;
+
+				foreach(Node n in currentPath)
+				{
+					actualTiles[n.x.ToString() + n.y.ToString()].GetComponent<HexTile>().ResetColor();	//Reseting tiles color
+				}
+
+				currentPath.Clear();
 			}
 
 			//First click select the start node
@@ -376,6 +301,8 @@ namespace PathFinding
 			{
 				startNode = node;
 				startNodeSelected = true;
+
+				actualTiles[startNode.x.ToString() + startNode.y.ToString()].GetComponent<HexTile>().Selected(true);	//Selected tile color
 			}
 
 			//Second click select the end node
@@ -384,51 +311,18 @@ namespace PathFinding
 			{			
 				endNode = node;
 				endNodeSelected = true;
-			}
-		}
 
-		//Tester
-		private void OnDrawGizmos() 
-		{
+				actualTiles[endNode.x.ToString() + endNode.y.ToString()].GetComponent<HexTile>().Selected(true);	//Selected tile color
+				currentPath = AStar.GetPath(graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)], graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)]);	//Getting Path
 
-			//Code for checking the pathfinding
-
-			if(startNodeSelected)
-			{
-				Vector3 sPos = grid[startNode.x.ToString() + startNode.y.ToString()];
-
-				Gizmos.color = Color.red;
-				Gizmos.DrawWireSphere(sPos, hexRadius);
-			}
-			
-			if(endNodeSelected)
-			{
-				foreach (Node v in currentPath)
+				foreach(Node n in currentPath)
 				{
-					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
+					//Setting pathColor
 
-					Gizmos.color = Color.red;
-					Gizmos.DrawWireSphere(vPos, hexRadius);
-				};
+					if(new Vector2(n.x, n.y) != startNode && new Vector2(n.x, n.y) != endNode)
+						actualTiles[n.x.ToString() + n.y.ToString()].GetComponent<HexTile>().Selected();	
+				}
 			}
-
-			//Code for checking the neigbours
-
-			/*
-
-			if (startNodeSelected)
-			{
-				foreach (Node v in graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)].neighbours)
-				{
-					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
-
-					Gizmos.color = Color.red;
-					Gizmos.DrawWireSphere(vPos, hexRadius);
-				};
-			}
-			
-			*/
-
 		}
 	}
 }

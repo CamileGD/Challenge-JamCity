@@ -5,9 +5,9 @@ namespace PathFinding
 {
 	public class Node: IAStarNode 
 	{
-		public List<Node> neighbours;
-		public int x;
-		public int y;
+		public List<Node> neighbours;	//Neibhours for A*
+		public int x;	//Index X
+		public int y;	//Index Y
 		public int normalCost = 1;	//Cost per tile type
 		
 		public Node()

@@ -31,6 +31,10 @@ MonoBehaviour:
   s: 0
   cost: 1
   walkable: 0
+  offsetPos: {x: 0, y: 0, z: 0}
+  baseColor: {r: 1, g: 1, b: 1, a: 1}
+  selectedColor: {r: 1, g: 1, b: 1, a: 1}
+  pathColor: {r: 1, g: 1, b: 1, a: 1}
   gridRef: {fileID: 0}
 --- !u!1001 &3496236897188266487
 PrefabInstance:

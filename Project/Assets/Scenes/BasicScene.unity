@@ -152,19 +152,85 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f41a21bcffd494bb4067417f8867b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapPosition: {x: 0, y: 0, z: 0}
   mapWidth: 8
   mapHeight: 8
-  yRowSeparation: 2.33
   hexRadius: 0.5785
+  yRowSeparation: 2.33
   defaultHex: {fileID: 4342676474676411558, guid: 81bf4e4900549fd4e8941c43bff8db04, type: 3}
+  ForestList:
+  - {x: 0, y: 1}
+  - {x: 2, y: 1}
+  - {x: 4, y: 1}
+  - {x: 6, y: 2}
+  - {x: 2, y: 3}
+  - {x: 4, y: 3}
+  - {x: 6, y: 3}
+  - {x: 2, y: 4}
+  - {x: 4, y: 4}
+  - {x: 6, y: 5}
+  - {x: 7, y: 5}
+  - {x: 3, y: 6}
+  - {x: 4, y: 6}
+  - {x: 6, y: 6}
+  - {x: 2, y: 7}
+  - {x: 4, y: 7}
   forestHex: {fileID: 6453841707398743733, guid: 66f747762af49734f9ab803714f8c7bd, type: 3}
+  GrassList:
+  - {x: 0, y: 0}
+  - {x: 3, y: 0}
+  - {x: 5, y: 0}
+  - {x: 3, y: 1}
+  - {x: 0, y: 2}
+  - {x: 3, y: 2}
+  - {x: 4, y: 2}
+  - {x: 1, y: 4}
+  - {x: 1, y: 5}
+  - {x: 4, y: 5}
+  - {x: 2, y: 6}
+  - {x: 7, y: 6}
+  - {x: 1, y: 7}
+  - {x: 3, y: 7}
   grassHex: {fileID: 1098252759862050725, guid: c38368825895ede4189312d4a380d2da, type: 3}
+  DesertList:
+  - {x: 6, y: 0}
+  - {x: 7, y: 0}
+  - {x: 5, y: 1}
+  - {x: 6, y: 1}
+  - {x: 7, y: 1}
+  - {x: 1, y: 2}
+  - {x: 5, y: 2}
+  - {x: 7, y: 2}
+  - {x: 0, y: 3}
+  - {x: 1, y: 3}
+  - {x: 7, y: 3}
+  - {x: 0, y: 4}
+  - {x: 5, y: 5}
   desertHex: {fileID: 4304877548973607674, guid: 63a9e4685e3733f4b84b294adc61dea1, type: 3}
+  MountainList:
+  - {x: 1, y: 0}
+  - {x: 2, y: 0}
+  - {x: 1, y: 1}
+  - {x: 2, y: 2}
+  - {x: 3, y: 3}
+  - {x: 3, y: 4}
+  - {x: 5, y: 6}
+  - {x: 5, y: 7}
+  - {x: 6, y: 7}
+  - {x: 7, y: 7}
   mountainHex: {fileID: 3081907914795353416, guid: 26d1c581b2ca53e47b3779e29413bd75, type: 3}
-  riverHex: {fileID: 3633605256720975133, guid: 2b7dc38cd5d391f4ab154d660b4b137f, type: 3}
-  tilesOcuppied: []
-  tilesCreated: []
+  WaterList:
+  - {x: 4, y: 0}
+  - {x: 5, y: 3}
+  - {x: 5, y: 4}
+  - {x: 6, y: 4}
+  - {x: 7, y: 4}
+  - {x: 0, y: 5}
+  - {x: 2, y: 5}
+  - {x: 3, y: 5}
+  - {x: 0, y: 6}
+  - {x: 1, y: 6}
+  - {x: 0, y: 7}
+  waterHex: {fileID: 3633605256720975133, guid: 2b7dc38cd5d391f4ab154d660b4b137f, type: 3}
 --- !u!4 &53090116
 Transform:
   m_ObjectHideFlags: 0
@@ -177,7 +243,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &745395900
 GameObject:
@@ -255,102 +321,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745395900}
-  m_LocalRotation: {x: 0, y: 0.7933534, z: -0.60876137, w: 0}
-  m_LocalPosition: {x: 4.3, y: 5.14, z: 4.43}
+  m_LocalRotation: {x: 0, y: 0.8191521, z: -0.5735764, w: 0}
+  m_LocalPosition: {x: 4.2, y: 5, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 75, y: 180, z: 0}
---- !u!1 &1631492713
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1631492715}
-  - component: {fileID: 1631492714}
-  m_Layer: 0
-  m_Name: Directional Light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!108 &1631492714
-Light:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631492713}
-  m_Enabled: 1
-  serializedVersion: 10
-  m_Type: 1
-  m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
-  m_Range: 10
-  m_SpotAngle: 30
-  m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 2
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-    m_CullingMatrixOverride:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingLayerMask: 1
-  m_Lightmapping: 4
-  m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
-  m_UseBoundingSphereOverride: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
---- !u!4 &1631492715
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631492713}
-  m_LocalRotation: {x: 0.42261827, y: 0, z: 0, w: 0.9063079}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 70, y: 180, z: 0}
