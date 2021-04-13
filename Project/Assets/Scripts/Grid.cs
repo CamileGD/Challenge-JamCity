@@ -10,6 +10,7 @@ namespace PathFinding
 		//Map settings
 		[Header("Map settings")]
 		[Space]
+		public Vector2 originPoint = Vector2.zero;	//Tile (0,0) position
 		public int mapWidth = 8;
 		public int mapHeight = 8;
 		public float hexRadius = 0.5785f;
@@ -85,9 +86,10 @@ namespace PathFinding
 						pos.x +=  hexRadius * Mathf.Sqrt(3.0f);
 					}
 
-					//TODO FUNCTION TO CALCULATE THE MODEL SIZE AND USE IT FOR THE GRID CREATION
 					//Hardcode without actual idea of the model real size
 					pos.z = hexRadius * 3.0f/(yRowSeparation)* x;
+
+					pos += new Vector3(originPoint.x, 0 ,originPoint.y);	//Moving the map
 
 					//Save positions
 
@@ -100,28 +102,16 @@ namespace PathFinding
 		//Paint map with corresponding tile on index
 		private void PaintMap()
 		{
-			//Painting forest
+			//Painting the map with the arrays
 
 			PaintWith(forestHex, ForestList);
-
-			//Painting grass
-
 			PaintWith(grassHex, GrassList);
-
-			//Painting mountains
-
 			PaintWith(mountainHex, MountainList);
-
-			//Painting desert
-
 			PaintWith(desertHex, DesertList);
-
-			//Painting rivers
-
 			PaintWith(waterHex, WaterList);
 			
 			//Filling not painted hexagons to default
-			//Default hexagons are not walkable
+			//Default hexagons are not walkable/interactable
 
 			List<Vector2> ToFill = new List<Vector2>();
 
@@ -150,7 +140,7 @@ namespace PathFinding
 		//Generating the node graph and the neighbours
 		public void GenerateGraph()
 		{
-			//Instantiating the 2D array and it nodes
+			//Instantiating the 2D array and its nodes
 
 			graph = new Node[mapWidth, mapHeight];
 

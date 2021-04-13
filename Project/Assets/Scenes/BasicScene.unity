@@ -152,6 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5f41a21bcffd494bb4067417f8867b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originPoint: {x: 0, y: 0}
   mapWidth: 8
   mapHeight: 8
   hexRadius: 0.5785

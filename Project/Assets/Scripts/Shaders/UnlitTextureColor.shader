@@ -12,7 +12,7 @@ Shader "Custom/UnlitTextureColor"
 	{
 		Tags
 		{
-			"Queue" = "Opaque"
+			"Queue" = "Transparent"
 			"PreviewType" = "Plane"
 		}
 
