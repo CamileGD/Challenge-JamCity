@@ -10,8 +10,9 @@ namespace PathFinding
 
 		//Map settings
 		public Vector3 mapPosition = Vector3.zero;
-		const int mapWidth = 8;		//TODO: (CHANGE TO NO CONSTANT)
-		const int mapHeight = 8;
+		public int mapWidth = 8;
+		public int mapHeight = 8;
+		public float yRowSeparation = 2.32f;
 
 		//Hex Settings
 		public float hexRadius = 1;
@@ -31,11 +32,14 @@ namespace PathFinding
 		private Vector2 endNode;
 		private Node[,] graph;
 
-		//Dictionaries
+		//Enumerables
+		public List<Vector2> tilesOcuppied = new List<Vector2>();
+		public List<Vector2> tilesCreated = new List<Vector2>();
 		private Dictionary<string, Vector3> grid = new Dictionary<string, Vector3>();	//Tile reference and World position
 		private Dictionary<string, int> costs = new Dictionary<string, int>();	//Tile reference and cost of it hexagon
 		private Dictionary<string, bool> walkable = new Dictionary<string, bool>();	//Tile reference and ifMovable reference 
 		private Dictionary<string, GameObject> actualTiles = new Dictionary<string, GameObject>();	//Tile reference and actual game object reference
+		public IList<IAStarNode> currentPath = new List<IAStarNode>();	//Reference to the current path
 
 		//-------------------------------------------------------------------------------------------------------------
 		//----------------------------------------------MAP GENERATION-------------------------------------------------
@@ -80,17 +84,17 @@ namespace PathFinding
 
 					//TODO FUNCTION TO CALCULATE THE MODEL SIZE AND USE IT FOR THE GRID CREATION
 					//Hardcode without actual idea of the model real size
-					pos.z = hexRadius * 3.0f/(2.3f)* x;
+					pos.z = hexRadius * 3.0f/(yRowSeparation)* x;
 
 					//Save positions
 
 					grid.Add(y.ToString() + x.ToString(), pos);	
+					tilesCreated.Add(new Vector2(y,x));
 				}
 			}
 		}
 
 		//Paint map with corresponding tile on index
-		//TODO: IF INDEX IS LEFT WITHOUT HEX FILL IT WITH DEFAULT HEX
 		private void PaintMap()
 		{
 			//Painting mountains
@@ -186,6 +190,32 @@ namespace PathFinding
 			RiverList.Add(new Vector2(0,7));
 
 			PaintWith(riverHex, RiverList);
+			
+			//Filling not painted hexagons to default
+			//Default hexagons are not walkable
+
+			List<Vector2> ToFill = new List<Vector2>();
+
+			for (int c = 0; c < tilesCreated.Count; c++)
+			{
+				bool free = true;
+
+				for(int o = 0; o < tilesOcuppied.Count; o++)
+				{
+					if (tilesCreated[c] == tilesOcuppied[o])
+					{
+						free = false;
+					}
+				}
+
+				if (free)
+				{
+					ToFill.Add(tilesCreated[c]);
+					Debug.Log("Debug: Hexagons not painted");
+				}
+			}
+
+			PaintWith(defaultHex, ToFill);
 		}
 
 		//Generating the node graph and the neighbours
@@ -213,8 +243,6 @@ namespace PathFinding
 			{
 				for (int y = 0; y < mapHeight; y++)
 				{
-					//TODO: CHANGE THIS TO MAKE IT WORK IN AN ODD HEIGHT/WIDTH MAP
-
 					if(x>0)
 					{
 						if (walkable[(x-1).ToString() + y.ToString()])
@@ -304,6 +332,10 @@ namespace PathFinding
 				//Tile reference
 
 				actualTiles.Add(xy[i].x.ToString() + xy[i].y.ToString(), tile);
+
+				//Occupied tile
+
+				tilesOcuppied.Add(xy[i]);
 			}
 		}
 
@@ -322,11 +354,10 @@ namespace PathFinding
 			}
 			else
 			{
-				currentPath.Clear();
+				if (currentPath!= null)
+					currentPath.Clear();
 			}
 		}
-
-		public IList<IAStarNode> currentPath = new List<IAStarNode>();
 
 		public void TileClicked(Vector2 node)
 		{
@@ -359,12 +390,19 @@ namespace PathFinding
 		//Tester
 		private void OnDrawGizmos() 
 		{
-			if (endNodeSelected)
+
+			//Code for checking the pathfinding
+
+			if(startNodeSelected)
 			{
+				Vector3 sPos = grid[startNode.x.ToString() + startNode.y.ToString()];
 
-				//Code for checking the pathfinding
-
-				
+				Gizmos.color = Color.red;
+				Gizmos.DrawWireSphere(sPos, hexRadius);
+			}
+			
+			if(endNodeSelected)
+			{
 				foreach (Node v in currentPath)
 				{
 					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
@@ -372,22 +410,25 @@ namespace PathFinding
 					Gizmos.color = Color.red;
 					Gizmos.DrawWireSphere(vPos, hexRadius);
 				};
-				
+			}
 
-				//Code for checking the neigbours
+			//Code for checking the neigbours
 
-				/*
+			/*
 
-				foreach (Node v in graph[Mathf.RoundToInt(endNode.x), Mathf.RoundToInt(endNode.y)].neighbours)
+			if (startNodeSelected)
+			{
+				foreach (Node v in graph[Mathf.RoundToInt(startNode.x), Mathf.RoundToInt(startNode.y)].neighbours)
 				{
 					Vector3 vPos = grid[v.x.ToString() + v.y.ToString()];
 
 					Gizmos.color = Color.red;
 					Gizmos.DrawWireSphere(vPos, hexRadius);
 				};
-
-				*/
 			}
+			
+			*/
+
 		}
 	}
 }

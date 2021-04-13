@@ -153,13 +153,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapPosition: {x: 0, y: 0, z: 0}
-  hexRadius: 0.6
-  defaultHex: {fileID: 0}
+  mapWidth: 8
+  mapHeight: 8
+  yRowSeparation: 2.33
+  hexRadius: 0.5785
+  defaultHex: {fileID: 4342676474676411558, guid: 81bf4e4900549fd4e8941c43bff8db04, type: 3}
   forestHex: {fileID: 6453841707398743733, guid: 66f747762af49734f9ab803714f8c7bd, type: 3}
   grassHex: {fileID: 1098252759862050725, guid: c38368825895ede4189312d4a380d2da, type: 3}
   desertHex: {fileID: 4304877548973607674, guid: 63a9e4685e3733f4b84b294adc61dea1, type: 3}
   mountainHex: {fileID: 3081907914795353416, guid: 26d1c581b2ca53e47b3779e29413bd75, type: 3}
   riverHex: {fileID: 3633605256720975133, guid: 2b7dc38cd5d391f4ab154d660b4b137f, type: 3}
+  tilesOcuppied: []
+  tilesCreated: []
 --- !u!4 &53090116
 Transform:
   m_ObjectHideFlags: 0
@@ -251,7 +256,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745395900}
   m_LocalRotation: {x: 0, y: 0.7933534, z: -0.60876137, w: 0}
-  m_LocalPosition: {x: 4.3, y: 5.37, z: 4.64}
+  m_LocalPosition: {x: 4.3, y: 5.14, z: 4.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
