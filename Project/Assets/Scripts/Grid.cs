@@ -261,6 +261,10 @@ namespace PathFinding
 					//Saving its position
 
 					hexTile.SetInicialPos(grid[xy[i].x.ToString() + xy[i].y.ToString()]);
+
+					//Setting the parent
+
+					hexTile.gameObject.transform.SetParent(this.transform);
 				}
 			}
 		}
