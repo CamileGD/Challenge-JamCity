@@ -257,6 +257,10 @@ namespace PathFinding
 					//Occupied tile
 
 					tilesOcuppied.Add(xy[i]);
+
+					//Saving its position
+
+					hexTile.SetInicialPos(grid[xy[i].x.ToString() + xy[i].y.ToString()]);
 				}
 			}
 		}

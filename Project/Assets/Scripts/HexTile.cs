@@ -40,15 +40,15 @@ namespace PathFinding
             }
         }
 
-        private void Start() 
-        {
-            inicialPos = transform.position; //Saving initial pos
-        }
-
         public void SetIndex(int _x, int _y)
         {
             x = _x;
             y = _y;
+        }
+
+        public void SetInicialPos(Vector3 pos)
+        {
+            inicialPos = pos;   //Saving initial pos
         }
 
         //Mouse pressed on tile collider
